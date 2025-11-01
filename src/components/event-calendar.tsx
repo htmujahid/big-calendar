@@ -2,8 +2,42 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { Dispatch, HTMLAttributes, SetStateAction } from "react";
 
-import { cva, VariantProps } from "class-variance-authority";
-import { addDays, addMonths, addWeeks, addYears, areIntervalsOverlapping, differenceInDays, differenceInMilliseconds, differenceInMinutes, eachDayOfInterval, endOfDay, endOfMonth, endOfWeek, endOfYear, format, formatDate, getDaysInMonth, isAfter, isBefore, isSameDay, isSameMonth, isSameWeek, isSameYear, isToday, isWithinInterval, parseISO, startOfDay, startOfMonth, startOfWeek, startOfYear, subDays, subMonths, subWeeks, subYears } from "date-fns";
+import { cva, type VariantProps } from "class-variance-authority";
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  addYears,
+  areIntervalsOverlapping,
+  differenceInDays,
+  differenceInMilliseconds,
+  differenceInMinutes,
+  eachDayOfInterval,
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  endOfYear,
+  format,
+  formatDate,
+  getDaysInMonth,
+  isAfter,
+  isBefore,
+  isSameDay,
+  isSameMonth,
+  isSameWeek,
+  isSameYear,
+  isToday,
+  isWithinInterval,
+  parseISO,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
+  subDays,
+  subMonths,
+  subWeeks,
+  subYears,
+} from "date-fns";
 import { CalendarIcon, CalendarX2, ChevronLeft, ChevronRight, Clock, Text } from "lucide-react";
 import { useDragLayer, DndProvider, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage, HTML5Backend } from "react-dnd-html5-backend";
@@ -27,14 +61,15 @@ export type IEvent = {
   title: string;
   color: TEventColor;
   description: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
-}
+};
 
 export type ICalendarCell = {
   day: number;
   currentMonth: boolean;
   date: Date;
-}
+};
 
 const WORKING_HOURS = {
   0: { from: 0, to: 24 },
@@ -47,7 +82,6 @@ const WORKING_HOURS = {
 };
 
 const VISIBLE_HOURS = { from: 0, to: 24 };
-
 
 function rangeText(view: TCalendarView, date: Date) {
   const formatString = "MMM d, yyyy";
@@ -289,23 +323,25 @@ function getMonthCellEvents(date: Date, events: IEvent[], eventPositions: Record
     });
 }
 
-const EventCalendarContext = createContext({} as {
-  selectedDate: Date;
-  setSelectedDate: (date: Date | undefined) => void;
-  workingHours: TWorkingHours;
-  visibleHours: TVisibleHours;
-  events: IEvent[];
-  setLocalEvents: Dispatch<SetStateAction<IEvent[]>>;
-  view: TCalendarView;
-  badgeVariant: TBadgeVariant;
-  updateEvent: (event: IEvent) => void;
-  singleDayEvents: IEvent[];
-  multiDayEvents: IEvent[];
-  onAdd?: ({ startDate, hour, minute }: { startDate: Date; hour: number; minute: number }) => void;
-  onDrag?: (event: IEvent) => void;
-  onDetail?: (event: IEvent) => void;
-  onViewUpdate?: (view: TCalendarView) => void;
-});
+const EventCalendarContext = createContext(
+  {} as {
+    selectedDate: Date;
+    setSelectedDate: (date: Date | undefined) => void;
+    workingHours: TWorkingHours;
+    visibleHours: TVisibleHours;
+    events: IEvent[];
+    setLocalEvents: Dispatch<SetStateAction<IEvent[]>>;
+    view: TCalendarView;
+    badgeVariant: TBadgeVariant;
+    updateEvent: (event: IEvent) => void;
+    singleDayEvents: IEvent[];
+    multiDayEvents: IEvent[];
+    onAdd?: ({ startDate, hour, minute }: { startDate: Date; hour: number; minute: number }) => void;
+    onDrag?: (event: IEvent) => void;
+    onDetail?: (event: IEvent) => void;
+    onViewUpdate?: (view: TCalendarView) => void;
+  }
+);
 
 function EventCalendarProvider({
   children,
@@ -493,11 +529,7 @@ function CustomDragLayer() {
   );
 }
 
-function DndProviderWrapper({ 
-  children 
-}: {
-  children: React.ReactNode;
-}) {
+function DndProviderWrapper({ children }: { children: React.ReactNode }) {
   return (
     <DndProvider backend={HTML5Backend}>
       {children}
@@ -510,13 +542,7 @@ const ItemTypes = {
   EVENT: "event",
 };
 
-function DraggableEvent({ 
-  event, 
-  children 
-}: {
-  event: IEvent;
-  children: React.ReactNode;
-}) {
+function DraggableEvent({ event, children }: { event: IEvent; children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -543,13 +569,7 @@ function DraggableEvent({
   );
 }
 
-function DroppableDayCell({ 
-  cell, 
-  children 
-}: {
-  cell: ICalendarCell;
-  children: React.ReactNode;
-}) {
+function DroppableDayCell({ cell, children }: { cell: ICalendarCell; children: React.ReactNode }) {
   const { updateEvent } = useEventCalendar();
 
   const [{ isOver, canDrop }, drop] = useDrop(
@@ -590,17 +610,7 @@ function DroppableDayCell({
   );
 }
 
-function DroppableTimeBlock({ 
-  date, 
-  hour, 
-  minute, 
-  children 
-}: {
-  date: Date;
-  hour: number;
-  minute: number;
-  children: React.ReactNode;
-}) {
+function DroppableTimeBlock({ date, hour, minute, children }: { date: Date; hour: number; minute: number; children: React.ReactNode }) {
   const { updateEvent } = useEventCalendar();
 
   const [{ isOver, canDrop }, drop] = useDrop(
@@ -660,22 +670,14 @@ export function EventCalendarRoot({
     <EventCalendarProvider {...props}>
       <div className="overflow-hidden rounded-xl border">{children}</div>
     </EventCalendarProvider>
-  )
+  );
 }
 
-export function EventCalendarContainer({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export function EventCalendarContainer({ children }: { children: React.ReactNode }) {
   return <DndProviderWrapper>{children}</DndProviderWrapper>;
 }
 
-export function EventCalendarHeader({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export function EventCalendarHeader({ children }: { children: React.ReactNode }) {
   const { selectedDate, setSelectedDate, events, view } = useEventCalendar();
 
   const today = new Date();
@@ -691,8 +693,7 @@ export function EventCalendarHeader({
 
   return (
     <div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
-
-      <div className="flex items-center gap-3 flex-1">
+      <div className="flex flex-1 items-center gap-3">
         <button
           className="flex size-14 flex-col items-start overflow-hidden rounded-lg border focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           onClick={handleClick}
@@ -761,15 +762,7 @@ const agendaEventCardVariants = cva(
   }
 );
 
-function AgendaEventCard({
-  event,
-  eventCurrentDay,
-  eventTotalDays
-}: {
-  event: IEvent;
-  eventCurrentDay?: number;
-  eventTotalDays?: number;
-}) {
+function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: { event: IEvent; eventCurrentDay?: number; eventTotalDays?: number }) {
   const { badgeVariant, onDetail } = useEventCalendar();
 
   const startDate = parseISO(event.startDate);
@@ -822,15 +815,7 @@ function AgendaEventCard({
   );
 }
 
-function AgendaDayGroup({
-  date,
-  events,
-  multiDayEvents
-}: {
-  date: Date;
-  events: IEvent[];
-  multiDayEvents: IEvent[]
-}) {
+function AgendaDayGroup({ date, events, multiDayEvents }: { date: Date; events: IEvent[]; multiDayEvents: IEvent[] }) {
   const sortedEvents = [...events].sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
   return (
@@ -924,15 +909,7 @@ export function EventCalendarAgendaView() {
   );
 }
 
-function YearViewDayCell({
-  day,
-  date,
-  events
-}: {
-  day: number;
-  date: Date;
-  events: IEvent[]
-}) {
+function YearViewDayCell({ day, date, events }: { day: number; date: Date; events: IEvent[] }) {
   const { setSelectedDate, onViewUpdate } = useEventCalendar();
 
   const maxIndicators = 3;
@@ -998,13 +975,7 @@ function YearViewDayCell({
   );
 }
 
-function YearViewMonth({
-  month,
-  events
-}: {
-  month: Date;
-  events: IEvent[]
-}) {
+function YearViewMonth({ month, events }: { month: Date; events: IEvent[] }) {
   const { setSelectedDate, onViewUpdate } = useEventCalendar();
 
   const monthName = format(month, "MMMM");
@@ -1093,7 +1064,7 @@ function MonthEventBadge({
   eventCurrentDay,
   eventTotalDays,
   className,
-  position: propPosition
+  position: propPosition,
 }: {
   event: IEvent;
   cellDate: Date;
@@ -1183,25 +1154,11 @@ const eventBulletVariants = cva("size-2 rounded-full", {
   },
 });
 
-function EventBullet({
-  color,
-  className
-}: {
-  color: TEventColor;
-  className: string
-}) {
+function EventBullet({ color, className }: { color: TEventColor; className: string }) {
   return <div className={cn(eventBulletVariants({ color, className }))} />;
 }
 
-function DayCell({
-  cell,
-  events,
-  eventPositions
-}: {
-  cell: ICalendarCell;
-  events: IEvent[];
-  eventPositions: Record<string, number>;
-}) {
+function DayCell({ cell, events, eventPositions }: { cell: ICalendarCell; events: IEvent[]; eventPositions: Record<string, number> }) {
   const { setSelectedDate, onViewUpdate } = useEventCalendar();
 
   const { day, currentMonth, date } = cell;
@@ -1290,13 +1247,7 @@ export function EventCalendarMonthView() {
   );
 }
 
-function CalendarTimeline({
-  firstVisibleHour,
-  lastVisibleHour
-}: {
-  firstVisibleHour: number;
-  lastVisibleHour: number
-}) {
+function CalendarTimeline({ firstVisibleHour, lastVisibleHour }: { firstVisibleHour: number; lastVisibleHour: number }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -1361,7 +1312,7 @@ const calendarWeekEventCardVariants = cva(
 
 function EventBlock({
   event,
-  className
+  className,
 }: {
   event: IEvent;
 } & (HTMLAttributes<HTMLDivElement> & Omit<VariantProps<typeof calendarWeekEventCardVariants>, "color">)) {
@@ -1385,7 +1336,14 @@ function EventBlock({
 
   return (
     <DraggableEvent event={event}>
-      <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }} onKeyDown={handleKeyDown} onClick={() => onDetail?.(event)}>
+      <div
+        role="button"
+        tabIndex={0}
+        className={calendarWeekEventCardClasses}
+        style={{ height: `${heightInPixels}px` }}
+        onKeyDown={handleKeyDown}
+        onClick={() => onDetail?.(event)}
+      >
         <div className="flex items-center gap-1.5 truncate">
           {["mixed", "dot"].includes(badgeVariant) && (
             <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
@@ -1406,13 +1364,7 @@ function EventBlock({
   );
 }
 
-function DayViewMultiDayEventsRow({
-  selectedDate,
-  multiDayEvents
-}: {
-  selectedDate: Date;
-  multiDayEvents: IEvent[];
-}) {
+function DayViewMultiDayEventsRow({ selectedDate, multiDayEvents }: { selectedDate: Date; multiDayEvents: IEvent[] }) {
   const dayStart = startOfDay(selectedDate);
   const dayEnd = endOfDay(selectedDate);
 
@@ -1555,21 +1507,33 @@ export function EventCalendarWeekView() {
                             {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
 
                             <DroppableTimeBlock date={day} hour={hour} minute={0}>
-                              <div className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: day, hour, minute: 0 })} />
+                              <div
+                                className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                                onClick={() => onAdd?.({ startDate: day, hour, minute: 0 })}
+                              />
                             </DroppableTimeBlock>
 
                             <DroppableTimeBlock date={day} hour={hour} minute={15}>
-                              <div className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: day, hour, minute: 15 })} />
+                              <div
+                                className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                                onClick={() => onAdd?.({ startDate: day, hour, minute: 15 })}
+                              />
                             </DroppableTimeBlock>
 
                             <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
                             <DroppableTimeBlock date={day} hour={hour} minute={30}>
-                              <div className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: day, hour, minute: 30 })} />
+                              <div
+                                className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                                onClick={() => onAdd?.({ startDate: day, hour, minute: 30 })}
+                              />
                             </DroppableTimeBlock>
 
                             <DroppableTimeBlock date={day} hour={hour} minute={45}>
-                              <div className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: day, hour, minute: 45 })} />
+                              <div
+                                className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                                onClick={() => onAdd?.({ startDate: day, hour, minute: 45 })}
+                              />
                             </DroppableTimeBlock>
                           </div>
                         );
@@ -1612,13 +1576,7 @@ export function EventCalendarWeekView() {
   );
 }
 
-function WeekViewMultiDayEventsRow({
-  selectedDate,
-  multiDayEvents
-}: {
-  selectedDate: Date;
-  multiDayEvents: IEvent[]
-}) {
+function WeekViewMultiDayEventsRow({ selectedDate, multiDayEvents }: { selectedDate: Date; multiDayEvents: IEvent[] }) {
   const weekStart = startOfWeek(selectedDate);
   const weekEnd = endOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
@@ -1778,21 +1736,33 @@ export function EventCalendarDayView() {
                       {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
 
                       <DroppableTimeBlock date={selectedDate} hour={hour} minute={0}>
-                        <div className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 0 })} />
+                        <div
+                          className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                          onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 0 })}
+                        />
                       </DroppableTimeBlock>
 
                       <DroppableTimeBlock date={selectedDate} hour={hour} minute={15}>
-                        <div className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 15 })} />
+                        <div
+                          className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                          onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 15 })}
+                        />
                       </DroppableTimeBlock>
 
                       <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
                       <DroppableTimeBlock date={selectedDate} hour={hour} minute={30}>
-                        <div className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 45 })} />
+                        <div
+                          className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                          onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 45 })}
+                        />
                       </DroppableTimeBlock>
 
                       <DroppableTimeBlock date={selectedDate} hour={hour} minute={45}>
-                        <div className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent" onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 45 })} />
+                        <div
+                          className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent"
+                          onClick={() => onAdd?.({ startDate: selectedDate, hour, minute: 45 })}
+                        />
                       </DroppableTimeBlock>
                     </div>
                   );

@@ -29,14 +29,7 @@ interface IProps {
   onToggle: () => void;
 }
 
-export function AddEventDialog({ 
-  startDate, 
-  startTime, 
-  users,
-  isOpen,
-  onClose,
-  onToggle
-}: IProps) {
+export function AddEventDialog({ startDate, startTime, users, isOpen, onClose, onToggle }: IProps) {
   const form = useForm<TEventFormData>({
     resolver: zodResolver(eventSchema),
     defaultValues: {

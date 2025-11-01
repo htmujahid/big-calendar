@@ -1,4 +1,3 @@
-
 import { CalendarRange, Columns, Grid2x2, Grid3x3, List } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -6,11 +5,7 @@ import { ButtonGroup } from "@/components/ui/button-group";
 
 import { useSearchParamsSetter } from "@/hooks/use-search-params-setter";
 
-export function CalendarViewSwitcher({
-  view
-}: {
-  view: "day" | "week" | "month" | "year" | "agenda";
-}) {
+export function CalendarViewSwitcher({ view }: { view: "day" | "week" | "month" | "year" | "agenda" }) {
   const setSearchParams = useSearchParamsSetter();
   return (
     <ButtonGroup>
@@ -69,6 +64,5 @@ export function CalendarViewSwitcher({
         <CalendarRange className="size-4" />
       </Button>
     </ButtonGroup>
-  )
+  );
 }
-

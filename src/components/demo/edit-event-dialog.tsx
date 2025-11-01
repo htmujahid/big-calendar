@@ -16,12 +16,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Form, FormField, FormLabel, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogHeader, DialogClose, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import type { IEvent } from "@/components/event-calendar";
 
 import { eventSchema } from "@/calendar/schemas";
 
 import type { TimeValue } from "react-aria-components";
 import type { TEventFormData } from "@/calendar/schemas";
-import { IEvent } from "../event-calendar";
 
 interface IProps {
   children: React.ReactNode;
@@ -29,11 +29,7 @@ interface IProps {
   users: { id: string; name: string; picturePath: string | null }[];
 }
 
-export function EditEventDialog({
-  children,
-  event,
-  users,
-}: IProps) {
+export function EditEventDialog({ children, event, users }: IProps) {
   const { isOpen, onClose, onToggle } = useDisclosure();
 
   const form = useForm<TEventFormData>({
@@ -75,7 +71,8 @@ export function EditEventDialog({
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>
             <AlertTriangle className="mr-1 inline-block size-4 text-yellow-500" />
-            This form is for demonstration purposes only and will not actually update event. In a real application, submit the form to the backend API to save the event.
+            This form is for demonstration purposes only and will not actually update event. In a real application, submit the form to the backend API to save
+            the event.
           </DialogDescription>
         </DialogHeader>
 

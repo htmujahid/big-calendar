@@ -6,11 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { useSearchParamsSetter } from "@/hooks/use-search-params-setter";
 
-export function UserSelect({
-  users
-}: {
-  users: { id: string; name: string, picturePath: string | null }[];
-}) {
+export function UserSelect({ users }: { users: { id: string; name: string; picturePath: string | null }[] }) {
   const search = useSearchParams();
   const setSearchParams = useSearchParamsSetter();
   const selectedUserId = search.get("user") ?? "all";
@@ -18,7 +14,7 @@ export function UserSelect({
   return (
     <Select
       value={selectedUserId}
-      onValueChange={(value) => {
+      onValueChange={value => {
         setSearchParams({ user: value });
       }}
     >

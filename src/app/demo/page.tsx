@@ -1,13 +1,12 @@
-
 import { getEvents, getUsers } from "@/calendar/requests";
 import { CalendarDemo } from "@/components/calendar-demo";
 
 export default async function CalendarPage({
-  searchParams
+  searchParams,
 }: {
-  searchParams: Promise<{ 
+  searchParams: Promise<{
     view: "day" | "week" | "month" | "year" | "agenda";
-    user: string; 
+    user: string;
   }>;
 }) {
   const [events, users] = await Promise.all([getEvents(), getUsers()]);
@@ -19,5 +18,5 @@ export default async function CalendarPage({
     <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 px-8 py-4">
       <CalendarDemo events={filteredEvents} users={users} view={view} />
     </div>
-  )
+  );
 }
